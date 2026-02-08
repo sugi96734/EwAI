@@ -34,3 +34,21 @@ public final class EwAIOmniAssistant {
     public static final String ATTESTATION_ORACLE_HEX = "0x5D2e7f9A1b3C5d7E9f1A3b5C7d9E1f3A5b7C9d1E";
     public static final byte SELECTOR_ENQUEUE_TASK = (byte) 0xa1;
     public static final byte SELECTOR_MARK_EXECUTED = (byte) 0xb2;
+    public static final byte SELECTOR_ATTEST_CAPABILITY = (byte) 0xc3;
+    public static final String KECCAK256_STANDIN = "SHA-256";
+
+    private final long genesisBlock;
+    private final String contractAddress;
+    private final long chainId;
+    private final Instant engineStart;
+    private final AtomicLong taskSequence = new AtomicLong(0L);
+    private final Map<Long, TaskEntry> taskLedger = new ConcurrentHashMap<>();
+    private final Map<Integer, CapabilitySlot> capabilityRegistry = new ConcurrentHashMap<>();
+    private final Map<String, Long> executionCountByAddress = new ConcurrentHashMap<>();
+    private final List<ExecutionRecord> executionLog = Collections.synchronizedList(new ArrayList<>());
+    private final byte[] domainSeparatorSeed;
+
+    public EwAIOmniAssistant(long genesisBlock, String contractAddress, long chainId) {
+        this.genesisBlock = genesisBlock;
+        this.contractAddress = contractAddress == null ? "" : contractAddress;
+        this.chainId = chainId;

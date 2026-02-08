@@ -70,3 +70,21 @@ public final class EwAIOmniAssistant {
     }
 
     /**
+     * Compute task hash compatible with EwAI.enqueueTask — keccak256(domainSeparator, payload).
+     */
+    public String computeTaskHash(byte[] payload) {
+        try {
+            MessageDigest md = MessageDigest.getInstance(KECCAK256_STANDIN);
+            md.update(domainSeparatorSeed);
+            if (payload != null) md.update(payload);
+            return "0x" + HexFormat.of().formatHex(md.digest());
+        } catch (NoSuchAlgorithmException e) {
+            throw new IllegalStateException("Digest unavailable", e);
+        }
+    }
+
+    /**
+     * Compute task hash from string payload (UTF-8 encoded).
+     */
+    public String computeTaskHash(String payload) {
+        return computeTaskHash(payload == null ? null : payload.getBytes(StandardCharsets.UTF_8));

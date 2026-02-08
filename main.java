@@ -88,3 +88,21 @@ public final class EwAIOmniAssistant {
      */
     public String computeTaskHash(String payload) {
         return computeTaskHash(payload == null ? null : payload.getBytes(StandardCharsets.UTF_8));
+    }
+
+    /**
+     * Enqueue a task locally (mirrors contract enqueueTask).
+     */
+    public long enqueueTaskLocal(String taskHashHex, String requesterAddress, int priority) {
+        if (taskLedger.size() >= TASK_QUEUE_CAP) {
+            throw new IllegalStateException("EwAI_QueueFull");
+        }
+        long seq = taskSequence.incrementAndGet();
+        long enqueuedAt = System.currentTimeMillis();
+        TaskEntry entry = new TaskEntry(
+                seq,
+                taskHashHex,
+                requesterAddress,
+                enqueuedAt,
+                priority,
+                false,

@@ -52,3 +52,21 @@ public final class EwAIOmniAssistant {
         this.genesisBlock = genesisBlock;
         this.contractAddress = contractAddress == null ? "" : contractAddress;
         this.chainId = chainId;
+        this.engineStart = Instant.now();
+        this.domainSeparatorSeed = buildDomainSeparatorSeed();
+    }
+
+    private byte[] buildDomainSeparatorSeed() {
+        try {
+            MessageDigest md = MessageDigest.getInstance(KECCAK256_STANDIN);
+            md.update(ByteBuffer.allocate(8).putLong(chainId).array());
+            md.update(contractAddress.getBytes(StandardCharsets.UTF_8));
+            md.update(DOMAIN_LABEL.getBytes(StandardCharsets.UTF_8));
+            md.update(ByteBuffer.allocate(8).putLong(genesisBlock).array());
+            return md.digest();
+        } catch (NoSuchAlgorithmException e) {
+            throw new IllegalStateException("Digest unavailable", e);
+        }
+    }
+
+    /**

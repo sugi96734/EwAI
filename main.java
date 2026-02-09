@@ -268,3 +268,21 @@ public final class EwAIOmniAssistant {
         public final Instant timestamp;
 
         public ExecutionRecord(String executorAddress, long taskSequenceId, long blockNumber, Instant timestamp) {
+            this.executorAddress = executorAddress;
+            this.taskSequenceId = taskSequenceId;
+            this.blockNumber = blockNumber;
+            this.timestamp = timestamp;
+        }
+    }
+
+    // ─── Hermes AI routing helpers ────────────────────────────────────────────────
+
+    /**
+     * Priority levels for task routing (aligned with contract uint8 priority).
+     */
+    public enum TaskPriority {
+        LOW(0), NORMAL(1), HIGH(2), URGENT(3);
+        public final int code;
+        TaskPriority(int code) { this.code = code; }
+    }
+

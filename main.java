@@ -124,3 +124,21 @@ public final class EwAIOmniAssistant {
         executionCountByAddress.merge(executorAddress, 1L, Long::sum);
         executionLog.add(new ExecutionRecord(executorAddress, taskSequenceId, entry.executedAtBlock, Instant.now()));
     }
+
+    /**
+     * Attest a capability in a slot (mirrors contract attestCapability).
+     */
+    public void attestCapabilityLocal(int slotIndex, String capabilityIdHex, String attesterAddress) {
+        if (slotIndex < 0 || slotIndex >= CAPABILITY_SLOTS) {
+            throw new IllegalArgumentException("EwAI_InvalidCapabilityIndex");
+        }
+        long attestedAt = System.currentTimeMillis();
+        capabilityRegistry.put(slotIndex, new CapabilitySlot(capabilityIdHex, attesterAddress, attestedAt, false));
+    }
+
+    /**
+     * Revoke a capability slot locally (mirrors contract revokeCapability).
+     */
+    public void revokeCapabilityLocal(int slotIndex) {
+        CapabilitySlot slot = capabilityRegistry.get(slotIndex);
+        if (slot == null) return;

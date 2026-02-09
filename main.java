@@ -106,3 +106,21 @@ public final class EwAIOmniAssistant {
                 enqueuedAt,
                 priority,
                 false,
+                0L
+        );
+        taskLedger.put(seq, entry);
+        return seq;
+    }
+
+    /**
+     * Mark a task as executed locally (mirrors contract markTaskExecuted).
+     */
+    public void markTaskExecutedLocal(long taskSequenceId, String executorAddress) {
+        TaskEntry entry = taskLedger.get(taskSequenceId);
+        if (entry == null) throw new IllegalArgumentException("EwAI_TaskNotFound");
+        if (entry.executed) throw new IllegalStateException("EwAI_AlreadyExecuted");
+        entry.executed = true;
+        entry.executedAtBlock = genesisBlock + executionLog.size();
+        executionCountByAddress.merge(executorAddress, 1L, Long::sum);
+        executionLog.add(new ExecutionRecord(executorAddress, taskSequenceId, entry.executedAtBlock, Instant.now()));
+    }

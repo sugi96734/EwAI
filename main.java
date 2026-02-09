@@ -142,3 +142,21 @@ public final class EwAIOmniAssistant {
     public void revokeCapabilityLocal(int slotIndex) {
         CapabilitySlot slot = capabilityRegistry.get(slotIndex);
         if (slot == null) return;
+        capabilityRegistry.put(slotIndex, new CapabilitySlot(slot.capabilityId, slot.attester, slot.attestedAtBlock, true));
+    }
+
+    /**
+     * Compute reward for an execution (basis points of base unit).
+     */
+    public long computeRewardForExecution(long baseUnit) {
+        return (baseUnit * REWARD_BASIS_POINTS) / BP_DENOM;
+    }
+
+    /**
+     * Get current epoch index at a given block number (12-block cooldown windows).
+     */
+    public long getEpochIndexAtBlock(long blockNumber) {
+        if (blockNumber < genesisBlock) return 0L;
+        return (blockNumber - genesisBlock) / EXECUTION_COOLDOWN_BLOCKS;
+    }
+

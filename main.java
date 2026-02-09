@@ -196,3 +196,21 @@ public final class EwAIOmniAssistant {
     public long getGenesisBlock() { return genesisBlock; }
     public String getContractAddress() { return contractAddress; }
     public long getChainId() { return chainId; }
+    public Instant getEngineStart() { return engineStart; }
+    public byte[] getDomainSeparatorSeed() { return domainSeparatorSeed.clone(); }
+
+    /**
+     * Build calldata selector for enqueueTask(bytes32,address,uint8). First byte placeholder.
+     */
+    public static byte[] selectorEnqueueTask() {
+        return new byte[] { SELECTOR_ENQUEUE_TASK, 0x00, 0x00, 0x00 };
+    }
+
+    public static byte[] selectorMarkTaskExecuted() {
+        return new byte[] { SELECTOR_MARK_EXECUTED, 0x00, 0x00, 0x00 };
+    }
+
+    public static byte[] selectorAttestCapability() {
+        return new byte[] { SELECTOR_ATTEST_CAPABILITY, 0x00, 0x00, 0x00 };
+    }
+

@@ -286,3 +286,21 @@ public final class EwAIOmniAssistant {
         TaskPriority(int code) { this.code = code; }
     }
 
+    /**
+     * Build a payload map for relay submission (key-value for encoding).
+     */
+    public Map<String, Object> buildEnqueuePayload(String taskHashHex, String requesterAddress, TaskPriority priority) {
+        Map<String, Object> payload = new LinkedHashMap<>();
+        payload.put("taskHash", taskHashHex);
+        payload.put("requester", requesterAddress);
+        payload.put("priority", priority.code);
+        payload.put("domain", DOMAIN_LABEL);
+        payload.put("chainId", chainId);
+        payload.put("contract", contractAddress);
+        return payload;
+    }
+
+    /**
+     * Validate requester address format (basic 0x + 40 hex).
+     */
+    public static boolean isValidRequesterFormat(String address) {

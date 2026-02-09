@@ -178,3 +178,21 @@ public final class EwAIOmniAssistant {
     public long getExecutionCountForAddress(String address) {
         return executionCountByAddress.getOrDefault(address, 0L);
     }
+
+    public List<ExecutionRecord> getExecutionLogSnapshot() {
+        synchronized (executionLog) {
+            return new ArrayList<>(executionLog);
+        }
+    }
+
+    public int getTaskLedgerSize() {
+        return taskLedger.size();
+    }
+
+    public int getCapabilityRegistrySize() {
+        return capabilityRegistry.size();
+    }
+
+    public long getGenesisBlock() { return genesisBlock; }
+    public String getContractAddress() { return contractAddress; }
+    public long getChainId() { return chainId; }

@@ -214,3 +214,21 @@ public final class EwAIOmniAssistant {
         return new byte[] { SELECTOR_ATTEST_CAPABILITY, 0x00, 0x00, 0x00 };
     }
 
+    /**
+     * Encode capability ID as 32-byte hex for contract (left-padded).
+     */
+    public static String encodeCapabilityId32(String hex) {
+        if (hex == null || hex.isEmpty()) return "0x" + "0".repeat(64);
+        String clean = hex.startsWith("0x") ? hex.substring(2) : hex;
+        if (clean.length() >= 64) return "0x" + clean.substring(0, 64);
+        return "0x" + "0".repeat(64 - clean.length()) + clean;
+    }
+
+    // ─── Inner data types ────────────────────────────────────────────────────────
+
+    public static final class TaskEntry {
+        public final long sequenceId;
+        public final String taskHashHex;
+        public final String requesterAddress;
+        public final long enqueuedAtMs;
+        public final int priority;

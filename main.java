@@ -232,3 +232,21 @@ public final class EwAIOmniAssistant {
         public final String requesterAddress;
         public final long enqueuedAtMs;
         public final int priority;
+        public volatile boolean executed;
+        public volatile long executedAtBlock;
+
+        public TaskEntry(long sequenceId, String taskHashHex, String requesterAddress,
+                         long enqueuedAtMs, int priority, boolean executed, long executedAtBlock) {
+            this.sequenceId = sequenceId;
+            this.taskHashHex = taskHashHex;
+            this.requesterAddress = requesterAddress;
+            this.enqueuedAtMs = enqueuedAtMs;
+            this.priority = priority;
+            this.executed = executed;
+            this.executedAtBlock = executedAtBlock;
+        }
+    }
+
+    public static final class CapabilitySlot {
+        public final String capabilityId;
+        public final String attester;

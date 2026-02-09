@@ -160,3 +160,21 @@ public final class EwAIOmniAssistant {
         return (blockNumber - genesisBlock) / EXECUTION_COOLDOWN_BLOCKS;
     }
 
+    /**
+     * Check whether cooldown has elapsed for a task (by enqueued block).
+     */
+    public boolean isCooldownElapsed(long enqueuedBlock, long currentBlock) {
+        return currentBlock >= enqueuedBlock + EXECUTION_COOLDOWN_BLOCKS;
+    }
+
+    public Optional<TaskEntry> getTask(long sequenceId) {
+        return Optional.ofNullable(taskLedger.get(sequenceId));
+    }
+
+    public Optional<CapabilitySlot> getCapabilitySlot(int index) {
+        return Optional.ofNullable(capabilityRegistry.get(index));
+    }
+
+    public long getExecutionCountForAddress(String address) {
+        return executionCountByAddress.getOrDefault(address, 0L);
+    }

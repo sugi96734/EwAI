@@ -304,3 +304,21 @@ public final class EwAIOmniAssistant {
      * Validate requester address format (basic 0x + 40 hex).
      */
     public static boolean isValidRequesterFormat(String address) {
+        if (address == null) return false;
+        if (!address.startsWith("0x") || address.length() != 42) return false;
+        return address.substring(2).matches("[0-9a-fA-F]{40}");
+    }
+
+    /**
+     * Default config for mainnet (chainId 1). Contract address must be set after deploy.
+     */
+    public static EwAIOmniAssistant forMainnet(long genesisBlock, String contractAddress) {
+        return new EwAIOmniAssistant(genesisBlock, contractAddress, 1L);
+    }
+
+    /**
+     * Default config for Sepolia (chainId 11155111).
+     */
+    public static EwAIOmniAssistant forSepolia(long genesisBlock, String contractAddress) {
+        return new EwAIOmniAssistant(genesisBlock, contractAddress, 11155111L);
+    }

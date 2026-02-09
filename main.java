@@ -250,3 +250,21 @@ public final class EwAIOmniAssistant {
     public static final class CapabilitySlot {
         public final String capabilityId;
         public final String attester;
+        public final long attestedAtBlock;
+        public final boolean revoked;
+
+        public CapabilitySlot(String capabilityId, String attester, long attestedAtBlock, boolean revoked) {
+            this.capabilityId = capabilityId;
+            this.attester = attester;
+            this.attestedAtBlock = attestedAtBlock;
+            this.revoked = revoked;
+        }
+    }
+
+    public static final class ExecutionRecord {
+        public final String executorAddress;
+        public final long taskSequenceId;
+        public final long blockNumber;
+        public final Instant timestamp;
+
+        public ExecutionRecord(String executorAddress, long taskSequenceId, long blockNumber, Instant timestamp) {

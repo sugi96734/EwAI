@@ -358,3 +358,21 @@ public final class EwAIOmniAssistant {
         List<Integer> out = new ArrayList<>();
         for (int i = 0; i < CAPABILITY_SLOTS; i++) {
             CapabilitySlot s = capabilityRegistry.get(i);
+            if (s != null && !s.revoked) out.add(i);
+        }
+        return out;
+    }
+
+    /**
+     * Export execution log as a summary map for reporting.
+     */
+    public Map<String, Object> getExecutionSummary() {
+        Map<String, Object> summary = new LinkedHashMap<>();
+        summary.put("totalExecutions", executionLog.size());
+        summary.put("genesisBlock", genesisBlock);
+        summary.put("chainId", chainId);
+        summary.put("contractAddress", contractAddress);
+        summary.put("engineUptimeMs", java.time.Duration.between(engineStart, Instant.now()).toMillis());
+        summary.put("executionCountByAddress", new LinkedHashMap<>(executionCountByAddress));
+        return summary;
+    }

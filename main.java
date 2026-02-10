@@ -394,3 +394,21 @@ public final class EwAIOmniAssistant {
     // ─── Calldata encoding helpers (ABI-like) ─────────────────────────────────────
 
     /**
+     * Encode uint256 for contract call (32 bytes big-endian).
+     */
+    public static byte[] encodeUint256(long value) {
+        ByteBuffer buf = ByteBuffer.allocate(32);
+        buf.position(24);
+        buf.putLong(value);
+        return buf.array();
+    }
+
+    /**
+     * Encode address for contract call (20 bytes, right-aligned in 32 bytes).
+     */
+    public static byte[] encodeAddress(String hexAddress) {
+        String clean = hexAddress.startsWith("0x") ? hexAddress.substring(2) : hexAddress;
+        if (clean.length() != 40) throw new IllegalArgumentException("Invalid address length");
+        byte[] raw = HexFormat.of().parseHex(clean);
+        byte[] out = new byte[32];
+        System.arraycopy(raw, 0, out, 12, 20);

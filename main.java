@@ -322,3 +322,21 @@ public final class EwAIOmniAssistant {
     public static EwAIOmniAssistant forSepolia(long genesisBlock, String contractAddress) {
         return new EwAIOmniAssistant(genesisBlock, contractAddress, 11155111L);
     }
+
+    /**
+     * Batch-enqueue multiple tasks; returns list of sequence IDs. Fails if queue would exceed cap.
+     */
+    public List<Long> enqueueTaskBatch(List<TaskPayload> payloads) {
+        if (taskLedger.size() + payloads.size() > TASK_QUEUE_CAP) {
+            throw new IllegalStateException("EwAI_QueueFull");
+        }
+        List<Long> ids = new ArrayList<>(payloads.size());
+        for (TaskPayload p : payloads) {
+            String hash = p.taskHashHex != null ? p.taskHashHex : computeTaskHash(p.payloadUtf8);
+            long seq = enqueueTaskLocal(hash, p.requesterAddress, p.priority);
+            ids.add(seq);
+        }
+        return ids;
+    }
+
+    /**

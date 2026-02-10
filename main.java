@@ -376,3 +376,21 @@ public final class EwAIOmniAssistant {
         summary.put("executionCountByAddress", new LinkedHashMap<>(executionCountByAddress));
         return summary;
     }
+
+    public static final class TaskPayload {
+        public final String taskHashHex;
+        public final String payloadUtf8;
+        public final String requesterAddress;
+        public final int priority;
+
+        public TaskPayload(String taskHashHex, String payloadUtf8, String requesterAddress, int priority) {
+            this.taskHashHex = taskHashHex;
+            this.payloadUtf8 = payloadUtf8;
+            this.requesterAddress = requesterAddress;
+            this.priority = priority;
+        }
+    }
+
+    // ─── Calldata encoding helpers (ABI-like) ─────────────────────────────────────
+
+    /**

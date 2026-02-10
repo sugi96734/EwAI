@@ -340,3 +340,21 @@ public final class EwAIOmniAssistant {
     }
 
     /**
+     * Get all non-executed task sequence IDs in order.
+     */
+    public List<Long> getPendingTaskIds() {
+        List<Long> out = new ArrayList<>();
+        taskLedger.forEach((id, e) -> {
+            if (!e.executed) out.add(id);
+        });
+        Collections.sort(out);
+        return out;
+    }
+
+    /**
+     * Get capability slot indices that are not revoked.
+     */
+    public List<Integer> getActiveCapabilitySlotIndices() {
+        List<Integer> out = new ArrayList<>();
+        for (int i = 0; i < CAPABILITY_SLOTS; i++) {
+            CapabilitySlot s = capabilityRegistry.get(i);
